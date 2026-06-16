@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#1a2e1a">
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="manifest" href="manifest.json">
 <title>FRESH — Свежие продукты</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -303,16 +306,14 @@ const gs=id=>S.stores.find(s=>s.id===id);
 const gp=id=>S.products.find(p=>p.id===id);
 const gd=id=>S.districts.find(d=>d.id===id);
 const cq=pid=>{const i=S.cart.find(c=>c.productId===pid);return i?i.quantity:0;};
-const cartCount=()=>{let n=0;S.cart.forEach(i=>n+=i.quantity);return r0(n);};
+const cartCount=()=>S.cart.length;
 const storeItems=sid=>S.cart.filter(c=>c.storeId===sid);
 const storeSubtotal=sid=>{let t=0;storeItems(sid).forEach(i=>t+=i.quantity*i.price);return r0(t);};
 const fmtQty=(q,u)=>u==='weight'?r1(q).toFixed(1)+' кг':r0(q)+' шт';
 const fmtPrice=(p,u)=>p+' ₽/'+(u==='weight'?'кг':'шт');
 
-/* ── CATEGORIES — FIX 1: added Готовая еда ── */
 const CATS=[{n:'Все',i:'🛒'},{n:'Мясо',i:'🥩'},{n:'Овощи',i:'🥬'},{n:'Фрукты',i:'🍎'},{n:'Молочка',i:'🥛'},{n:'Рассада',i:'🌱'},{n:'Рыба',i:'🐟'},{n:'Готовая еда',i:'🍱'}];
 
-/* ── CART UPDATE — fixed: step 0.1 or 1, never display stock ── */
 function cartUpdate(pid,delta,exactVal){
   const product=gp(pid);if(!product)return;
   const step=product.unit==='weight'?0.1:1;
@@ -345,7 +346,6 @@ function goTo(scr){
   CS=scr;render();
 }
 
-/* ── RENDER — FIX 2: preserve cats scroll position ── */
 function render(){
   renderNav();
   const fns={main:rMain,product:rProduct,cart:rCart,profile:rProfile,seller:rSeller,courier:rCourier,admin:rAdmin};
@@ -939,7 +939,6 @@ function editStockModal(p){
 }
 function bindEditStockModal(ov){ov.querySelector('#editStockSave').onclick=()=>{const pid=ov.querySelector('#editStockSave').dataset.pid,val=parseFloat(ov.querySelector('#newStock').value);if(isNaN(val)||val<0){toast('Некорректное значение');return;}const p=gp(pid);if(!p)return;p.stock=p.unit==='weight'?r1(val):Math.floor(val);save();closeModal();render();toast('Остаток обновлён');};}
 
-/* FIX 3: Added Готовая еда to product categories */
 function addProdModal(){
   return`<div class="sh-title">Новый товар</div>
   <input class="inp" id="pName" placeholder="Название товара">
