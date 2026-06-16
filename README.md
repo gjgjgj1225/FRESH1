@@ -303,7 +303,8 @@ const gs=id=>S.stores.find(s=>s.id===id);
 const gp=id=>S.products.find(p=>p.id===id);
 const gd=id=>S.districts.find(d=>d.id===id);
 const cq=pid=>{const i=S.cart.find(c=>c.productId===pid);return i?i.quantity:0;};
-const cartCount=()=>{let n=0;S.cart.forEach(i=>n+=i.quantity);return r0(n);};
+// Вот здесь правка: теперь значок показывает число позиций, а не сумму веса
+const cartCount=()=>S.cart.length;
 const storeItems=sid=>S.cart.filter(c=>c.storeId===sid);
 const storeSubtotal=sid=>{let t=0;storeItems(sid).forEach(i=>t+=i.quantity*i.price);return r0(t);};
 const fmtQty=(q,u)=>u==='weight'?r1(q).toFixed(1)+' кг':r0(q)+' шт';
